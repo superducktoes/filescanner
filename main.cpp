@@ -2,6 +2,12 @@
 #include<iostream>
 #include<string>
 
+#include <fstream>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <openssl/sha.h>
+
 int vtLookupHash(std::string fileHash) {
 
   setenv("PYTHONPATH",".",1);
@@ -28,7 +34,48 @@ int vtLookupHash(std::string fileHash) {
   return number;
 
 }
+int main(int argc, char** argv) {
+  
+  // create our sha object
+  SHA_CTX ctx;
+  SHA1_Init(&ctx);
+  
+  if(argc != 2) {
+    // if there's not one argument for the file quit
+    exit(0);
+  }
+  
+  std::string fileLine;
+  //std::ifstream infile("./test.txt");
+  std::ifstream infile(argv[1]);
+  
+  // read our file and update sha1 object
+  while(std::getline(infile, fileLine)) {
+    SHA1_Update(&ctx, fileLine.c_str(), fileLine.length());
+  }
+  
+  // put the message digest in md with 20 bytes output as per standard
+  unsigned char hash[SHA_DIGEST_LENGTH];
+  SHA1_Final(hash, &ctx);
+  
+  // copy and prepend for printing
+  char mdString[SHA_DIGEST_LENGTH*2 + 1];
+  for(int i = 0; i < SHA_DIGEST_LENGTH; i++) {
+    sprintf(&mdString[i*2], "%02x", (unsigned int)hash[i]);
 
+  }
+  
+  // print out our hash
+  std::cout << mdString << std::endl;
+  int fileScanResults;
+  
+  fileScanResults = vtLookupHash(mdString);                                   
+  std::cout << fileScanResults << "\n";  
+
+  return 0;
+}
+
+/*
 int main() {
   
   std::string fileToScan;
@@ -38,6 +85,6 @@ int main() {
   std::cin >> fileToScan;
   
   fileScanResults = vtLookupHash(fileToScan);
-  std::cout << fileScanResults;
+  std::cout << fileScanResults << "\n";
   return 0;
-}
+  }*/

@@ -4,7 +4,7 @@ import requests
 
 def lookup_hash(hash):
     report_url = 'https://www.virustotal.com/vtapi/v2/file/report'
-    params = {'apikey': '', 'resource': hash}
+    params = {'apikey': '242b0e436157242a793c643460ab6830abf05411b6f84a718040edb25c57100e', 'resource': hash}
     
     status = requests.get(report_url, params=params).json()
     
