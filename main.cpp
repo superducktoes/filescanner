@@ -34,6 +34,7 @@ int vtLookupHash(std::string fileHash) {
   return number;
 
 }
+
 int main(int argc, char** argv) {
   
   // create our sha object
@@ -46,7 +47,6 @@ int main(int argc, char** argv) {
   }
   
   std::string fileLine;
-  //std::ifstream infile("./test.txt");
   std::ifstream infile(argv[1]);
   
   // read our file and update sha1 object
@@ -67,24 +67,11 @@ int main(int argc, char** argv) {
   
   // print out our hash
   std::cout << mdString << std::endl;
-  int fileScanResults;
-  
+
+  // now that we have our hash send it to virustotal
+  int fileScanResults;  
   fileScanResults = vtLookupHash(mdString);                                   
   std::cout << fileScanResults << "\n";  
 
   return 0;
 }
-
-/*
-int main() {
-  
-  std::string fileToScan;
-  int fileScanResults;
-
-  std::cout << "Enter the file: ";
-  std::cin >> fileToScan;
-  
-  fileScanResults = vtLookupHash(fileToScan);
-  std::cout << fileScanResults << "\n";
-  return 0;
-  }*/
